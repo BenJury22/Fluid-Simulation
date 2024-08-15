@@ -5,20 +5,11 @@ def AvTemp(T, E, R = 2.912, Q = 342, a = 0.3, b = 5.67 * pow(10, -8)):
     T_dot = (1/R) * ((Q*(1-a)) - E*b*T**4)
     return T_dot
 
-dt = 0.001
-time_steps = 10000
-T = np.empty((time_steps + 1))
-Time = np.empty((time_steps + 1))
-T[0] = 14.98 + 273
-Time[0] = 2022
-FinalGrad = 0
-
-def EquilTemp(E, T):
-    for i in range(time_steps):
+def EquilTemp(E, T, dt):
+    for i in range(len(T) - 1):
         T[i + 1] = T[i] + AvTemp(T[i], E) * dt
-        Time[i+1] = Time[i] + dt
-    GradFinal = (T[time_steps] - T[time_steps - 1])/dt
-    return T[time_steps], Time[time_steps], GradFinal
+    GradFinal = (T[-1] - T[-2])/dt
+    return T[-1], GradFinal
 
 def Plot_T_Dependence(T, Time):
     plt.figure()
@@ -26,30 +17,48 @@ def Plot_T_Dependence(T, Time):
     plt.ylabel('Temperature')
     plt.plot(Time, T - 273)
 
-E = np.linspace(0.6, 1, 100)
-T_Final = np.empty((len(E)))
-Time_Final = np.empty((len(E)))
-GradFinal = np.empty((len(E)))
-for i in range(len(E)):
-    T_Final[i], Time_Final[i], GradFinal[i] = EquilTemp(E[i], T)
-
 def Plot_E_Dependence(E, T_Final):
     plt.figure()
     plt.xlabel('Emissivity')
     plt.ylabel('Equilibrium Temperature')
     plt.plot(E, T_Final - 273)
     
-plt.figure()
-plt.xlabel('Emissivity')
-plt.ylabel('Final Gradient')
-plt.plot(E, GradFinal)
-
+def Plot_FinalGrad(E, GradFinal):
+    plt.figure()
+    plt.xlabel('Emissivity')
+    plt.ylabel('Final Gradient')
+    plt.plot(E, GradFinal)
     
-Plot_E_Dependence(E, T_Final)
-
 def main():
-    return 0
-
+    # Time parameters
+    dt = 0.001
+    time_steps = 10000
+    
+    # Initialize Time Variable
+    Time = np.empty((time_steps + 1))
+    Time[0] = 2022
+    
+    # Initialize Temp Variable
+    T = np.empty((time_steps + 1))
+    T[0] = 14.98 + 273
+    
+    # Define Emissivity Factor
+    E = np.linspace(0.6, 1, 100)
+    
+    # Initialize Final Values
+    T_Final = np.empty((len(E)))
+    GradFinal = np.empty((len(E)))
+    
+    # Calculate Equilibrium Temperatures and Final Gradients
+    for i in range(len(E)):
+        T_Final[i], GradFinal[i] = EquilTemp(E[i], T, dt)
+        
+    # Plot Equilibrium temperature vs emissivity factor
+    Plot_E_Dependence(E, T_Final)
+    
+    # Plot Final Gradient vs emissivity factor
+    Plot_FinalGrad(E, GradFinal)
+    
 if __name__ == '__main__':
     main()
 
@@ -66,8 +75,6 @@ if __name__ == '__main__':
 #a = (dimensionless) is planetary albedo (reflectivity).
 #b = Stefan-Boltzmann constant.
 #E = emissivity factor
-#
-#
 
 
 
