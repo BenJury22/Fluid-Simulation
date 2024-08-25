@@ -1,0 +1,86 @@
+
+
+#This function will create the set of co-prdinates which the particles will be in. Within the inputed boundaries.
+#SO far in the main the co-ordinates are random but we may want to change this at some point
+def initialise_particle(boundaries):
+    return 0
+
+
+#This function can be used to find the value of a given property at any desired point (google smoothed-particle hydrodynamics for more info).
+#The exact form of the function is arbitrary but it should be set to 0 at the smoothing_radius.
+#"distance" is the distance between the point of interest and one of the surrounding particles.
+def smoothing_function(smoothing_radius, distance):
+    return 0
+
+
+#Gradient of the smoothing function which will also be useful for calculating some quantities
+def grad_smoothing_radius(smoothing_radius, distance):
+    return 0
+
+
+#Takes in the postion of interest
+#Will include a for loop going over all the surrounding particles (should work out how to optimise this) and calculate the value of the smoothing function for each one
+#The density will be the sum of these smoothing functions multiplied by the mass of each particle
+#Remember to normalise by dividing by the volume of the smoothing radius
+#SideNote: In the video he creates a continuous map showing the density at all points rather than just some discrete points, we should figure out how to do that
+def calculate_density(position):
+    return 0
+
+
+#To calculate the pressure we do (density at position - target density) * pressure multiplier.
+#The target density can easily be calulated by dividing the number of particles to the area of the surface
+def calculate_pressure():
+    return 0
+
+
+#Includes a for loop over all surrounfding particles.
+#Includes an equation that I don't underatand at the moment
+#Force will be dependent on "grad_smoothing_radius", "calculate_pressure", "calculate_density"
+def calculate_pressure_force():
+    return 0
+
+
+#From "calculate_pressure_force", we can calculate the change in velocity due to this force
+def pressure_delta_v():
+    return 0
+
+
+#Should be a pretty easy function
+def density_delta_v():
+    return 0
+
+
+#I haven't researched viscosity as much as pressure so there will propably be more details to work out
+def visvcous_delta_v():
+    return 0
+
+
+#We may want to add other forces e.g. moving particles with your mouse, heat sources
+def other_delta_v():
+    return 0
+
+
+#This will add all of the delta_vs to the previous timesteps' velocity to alculate the next timesteps' velocity
+def sum_v():
+    return 0
+
+
+#Will calulate the current position of all the the particles (p[i] + v[i] * dt)
+def calculate_new_position(old_position, velocity):
+    return 0
+
+#If this new velocity is outside of the boundary the velocity will be adapted to ensire the particle doesn't leave the boundary
+#Will propably look something like new_velocity = -old_velocity * damping factor
+#Will produce a full array of new velocites
+def boundary_conditions():
+    return 0
+
+
+#This will take the current positions of the particles and draw a frame for the simulation
+def draw_frame(coordinates):
+    return 0
+
+
+#Not sure how to structure this in main at the moment
+def main():
+    return 0
