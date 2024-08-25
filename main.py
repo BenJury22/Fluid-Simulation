@@ -1,33 +1,11 @@
 # Import Standard Libraries
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.collections as mc
 
 # Import Custom Functions
 import forces
 import initialconditions as IC
 import boundaryconditions as BC
-
-
-# This function currently uses matplotlib to draw a single frame instead of a
-# continous animation. By the end we should find a better looking library than
-# matplotlib.
-def draw_frame(xy, radius):
-    plt.rcParams["figure.figsize"] = [7.50, 5]
-    num = len(xy[0])
-    sizes = [radius] * num
-    fig, ax = plt.subplots()
-    collection = mc.CircleCollection(sizes, offsets=xy, transOffset=ax.transData, color='blue')
-    ax.add_collection(collection)
-    ax.margins(0.1)
-    plt.show()
-   
-
-# The smoothing function is the function which allows us to find the density at all
-# points in the fluid. We could use a variety of functions to do this, i have used a
-# very simple one
-def smoothing_function(radius, particle_distance):
-    return abs(radius - particle_distance)
+import customanimation as an
 
 
 def main():
@@ -67,6 +45,7 @@ def main():
 
         # Plotting
         # TODO create and run plotting/animation function.
+        an.draw_frame()
 
 
 if __name__ == '__main__':
