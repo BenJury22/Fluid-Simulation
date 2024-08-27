@@ -15,7 +15,7 @@ def main():
     frame_number = 1001
 
     # Force Variables 
-    g = 9.91 # Acceleration due to gravity ms^-2
+    g = 9.81 # Acceleration due to gravity ms^-2
 
     # IC & BC variables
     num = 10
