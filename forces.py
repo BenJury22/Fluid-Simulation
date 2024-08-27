@@ -1,12 +1,25 @@
-def apply_gravity(dt, veloctiy):
-    # Calculate velocity change based on gravity
-    dv = 0
-    return dv
+import numpy as np
 
+"""
+Gravity
+"""
+def apply_gravity(position, time_step, g):
+    # Create gravity vector pointing straight down.
+    g_vector = np.array([[0, -g]]).T
+
+    # Calculate velocity change based on gravity
+    return np.ones(position.shape) * g_vector * time_step
+
+"""
+Pressure
+"""
 def apply_pressure():
     #TODO
     return 0
 
+"""
+Viscosity
+"""
 def apply_viscosity():
     #TODO
     return 0
