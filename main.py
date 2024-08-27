@@ -5,7 +5,7 @@ import numpy as np
 import forces
 import initialconditions as IC
 import boundaryconditions as BC
-import customanimation as an
+import Animation as an
 
 
 def main():

@@ -14,6 +14,7 @@ def draw_frame(xy, xy_boundary):
     plt.show()
 
 #Arbitrary function at the moment
+#Soon i will import Simon's Gravity function and use that instead
 def simulate_steps(initial_pos, velocity, dt, time_steps):
     num = len(initial_pos)
     x = np.zeros((time_steps, num))
