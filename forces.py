@@ -16,3 +16,7 @@ def apply_viscosity():
 # very simple one
 def smoothing_function(radius, particle_distance):
     return abs(radius - particle_distance)
+
+def target_density(num, xy_boundaries):
+    x_boundary, y_boundary = xy_boundaries
+    return num / (x_boundary * y_boundary)
