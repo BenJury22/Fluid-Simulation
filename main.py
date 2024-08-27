@@ -26,7 +26,7 @@ def main():
     velocity = IC.initialise_velocity()
 
     # Generate Boundary Conditions
-    BC = BC.generate_BC()
+    # boundary_conditions = BC.generate_BC()
 
     # Run simulation
     times = np.arange(0, frame_number) * time_step
@@ -41,7 +41,7 @@ def main():
         position += velocity * time_step
 
         # Apply boundary conditions
-        position, velocity = BC.apply_BC(position, velocity, BC)
+        # position, velocity = BC.apply_BC(position, velocity, boundary_conditions)
 
         # Plotting
         # TODO create and run plotting/animation function.

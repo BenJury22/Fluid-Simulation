@@ -5,7 +5,7 @@ Gravity
 """
 def apply_gravity(position, time_step, g):
     # Create gravity vector pointing straight down.
-    g_vector = np.array([[0, -g]]).T
+    g_vector = np.array([[0, -g]])
 
     # Calculate velocity change based on gravity
     return np.ones(position.shape) * g_vector * time_step
