@@ -11,7 +11,7 @@ def draw_circles(xy, radius):
     plt.rcParams["figure.figsize"] = [7.50, 5]
 #    plt.rcParams["figure.autolayout"] = True
     
-    num = len(xy[0])
+    num = len(xy)
     sizes = [radius] * num
     fig, ax = plt.subplots()
     collection = mc.CircleCollection(sizes, offsets=xy, transOffset=ax.transData, color='blue')
@@ -49,4 +49,6 @@ def main():
     print()
     print("y Positions:", y)
     
-main()
+
+if __name__ == '__main__': 
+    main()

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.collections as mc
 
 
+
 # Currently produces particles in random positions but later we could add standard presets
 # e.g. all particles with constant seperation (like a lattice)
 def initialise_particles(num, xy_boundaries):
@@ -22,7 +23,7 @@ def initialise_particles(num, xy_boundaries):
 # matplotlib.
 def draw_frame(xy, radius):
     plt.rcParams["figure.figsize"] = [7.50, 5]
-    num = len(xy[0])
+    num = len(xy)
     sizes = [radius] * num
     fig, ax = plt.subplots()
     collection = mc.CircleCollection(sizes, offsets=xy, transOffset=ax.transData, color='blue')
@@ -30,6 +31,10 @@ def draw_frame(xy, radius):
     ax.margins(0.1)
     plt.show()
    
+
+def target_density(num, xy_boundaries):
+    x_boundary, y_boundary = xy_boundaries
+    return num / (x_boundary * y_boundary)
 
 
 # The smoothing function is the function which allows us to find the density at all
@@ -45,7 +50,7 @@ def main():
     
     num = 10
     xy_boundaries = [10, 10]
-    xy = initialise_particles(num, xy_boundaries)
-    print(xy)
+#    xy = initialise_particles(num, xy_boundaries)
+#    print(xy)
 
 main()
