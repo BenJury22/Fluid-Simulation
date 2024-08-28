@@ -1,51 +1,51 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation, colors, colormaps
+import matplotlib.animation as animation
+import numpy as np
 import initialconditions as IC
 
-def draw_frame(xy, xy_boundary):
-    fig = plt.figure()
-    scatter = plt.scatter(xy[:, 0], xy[:, 1], s = 40, c = 'lime')
-    axs = fig.get_axes()
-    x_bound, y_bound = xy_boundary
-    axs[0].set_xlim(0, x_bound)
-    axs[0].set_ylim(0, y_bound)
+class AnimatedScatter(object):
 
-    plt.show()
+    def __init__(self, num=500):
+        self.num = num
+        self.stream = self.data_stream()
 
-#Arbitrary function at the moment
-#Soon i will import Simon's Gravity function and use that instead
-def simulate_steps(initial_pos, velocity, dt, time_steps):
-    num = len(initial_pos)
-    x = np.zeros((time_steps, num))
-    y = np.zeros((time_steps, num))
-    x[0, :] = initial_pos[:, 0]
-    y[0, :] = initial_pos[:, 1]
-    for i in range(time_steps - 1):
-        x[i + 1] = x[i] + velocity * dt
-        y[i + 1] = y[i]
-    return x, y
+        self.fig, self.ax = plt.subplots()                                      # Setup the figure and axes
+        self.ani = animation.FuncAnimation(self.fig, self.update, interval=5,    # Setup FuncAnimation (this calls setup_plot and update)
+                                          init_func=self.setup_plot, blit=True)
 
-def test_animate():
-    num = 3
-    xy_boundaries = [10, 10]
-    xy = IC.initialise_particles(num, xy_boundaries)
-    print(xy)
 
-    velocity = 1
-    dt = 0.01
-    time_steps = 10
-    x, y = simulate_steps(xy, velocity, dt, time_steps)
-    print(x)
-    print(y)
+    def setup_plot(self):
+        x, y, c = next(self.stream).T                                              #Collect values from data_stream
+        
+        self.ax.xaxis.set_ticks([])                                                #Remove axis labels
+        self.ax.yaxis.set_ticks([])
+        self.scat = self.ax.scatter(x, y, c=c, s=40, vmin=0, vmax=1,                #Plot scatter graph
+                                        cmap="seismic", edgecolor="k")
+        self.ax.axis([-10, 15, -10, 15])
 
-    draw_frame(xy, xy_boundaries)
+        return self.scat,
     
+    def data_stream(self):
+        xy = (np.random.random((self.num, 2))-0.5)*10    #Maybe incorperate IC.initialise_particles (would need to change format of output)
+        c = np.random.random(self.num).T                 #Define nitial colour
+        velocity = 1
+        while True:
+            velocity += 0.1
+            xy += np.ones((self.num, 2)) * 0.001 * velocity    #Update xy positions (currently moves along y diagonal line)
+            c += 0.0005 * (xy[:,0] - xy[:,1])                   #Updates colour (we may want a meaningful colour dependency)
+            yield np.c_[xy[:,0], xy[:,1], c]                   #return an array of current [x, y, c] values
+
+        
+    def update(self, i):
+        data = next(self.stream)                            #Collect the next timesteps set of data
+        self.scat.set_offsets(data[:, :2])                  #x and y values
+        self.scat.set_array(data[:, 2])                     #colour value
+
+        return self.scat,
 
 
-
-
-if __name__ == "__main__":
-    test_animate()
+if __name__ == '__main__':
+    a = AnimatedScatter()
+    plt.show()
 
 
