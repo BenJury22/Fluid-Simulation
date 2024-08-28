@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-import initialconditions as IC
 
 class AnimatedScatter(object):
 
