@@ -7,7 +7,7 @@ import forces
 
 def final(num):
         xy = (np.random.random((num, 2)))*10    #Maybe incorperate IC.initialise_particles (would need to change format of output)
-        dt = 0.01
+        dt = 0.005
         g = -9.81
         velocity = np.zeros((num, 2))
         c = np.zeros((num))
@@ -17,7 +17,7 @@ def final(num):
             xy += dt * velocity                               #Update xy positions (currently moves along y diagonal line)
             for i in range(num):
                  velocity_mag[i] = ((velocity[i, 0])**2 + (velocity[i, 1])**2)**(1/2)
-            c = 0.1 * velocity_mag                          #Updates colour (we may want a meaningful colour dependency)
+            c = 0.05 * velocity_mag                          #Updates colour (we may want a meaningful colour dependency)
             yield np.c_[xy[:,0], xy[:,1], c]                  #return an array of current [x, y, c] values
 
 
@@ -59,10 +59,11 @@ class AnimatedScatter(object):
 
 
 if __name__ == '__main__':
-    bound = 15
-    a = AnimatedScatter(num=5, data_stream_func=final, 
-                        cmap="hot", point_size=50, 
-                        xlim=(-bound, bound), ylim=(-bound, bound), 
+    bound = 10
+    margin = 5
+    a = AnimatedScatter(num=200, data_stream_func=final, 
+                        cmap="seismic", point_size=50, 
+                        xlim=(0 - margin, bound + margin), ylim=(0 - margin, bound + margin), 
                         interval=5)
     plt.show()
 
