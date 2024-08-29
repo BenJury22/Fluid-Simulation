@@ -25,9 +25,9 @@ def final(num):
 class AnimatedScatter(object):
 
     def __init__(self, num=500, data_stream_func=None, cmap="seismic", 
-                 point_size=40, xlim=(-10, 15), ylim=(-10, 15), interval=5):
+                 point_size=40, xlim=(-10, 15), ylim=(-10, 15), interval=5, **kwargs):
         self.num = num
-        self.stream = data_stream_func(self.num) if data_stream_func else self.data_stream()
+        self.stream = data_stream_func(self.num, **kwargs) if data_stream_func else self.data_stream()
 
         self.cmap = cmap
         self.point_size = point_size
@@ -37,7 +37,7 @@ class AnimatedScatter(object):
 
         self.fig, self.ax = plt.subplots()                                      # Setup the figure and axes
         self.ani = animation.FuncAnimation(self.fig, self.update, interval=self.interval,    # Setup FuncAnimation (this calls setup_plot and update)
-                                          init_func=self.setup_plot, blit=True)
+                                          init_func=self.setup_plot, blit=None)
 
     def setup_plot(self):
         x, y, c = next(self.stream).T                                              #Collect values from data_stream
@@ -61,7 +61,7 @@ class AnimatedScatter(object):
 if __name__ == '__main__':
     bound = 10
     margin = 5
-    a = AnimatedScatter(num=200, data_stream_func=final, 
+    a = AnimatedScatter(num=500, data_stream_func=final, 
                         cmap="seismic", point_size=50, 
                         xlim=(0 - margin, bound + margin), ylim=(0 - margin, bound + margin), 
                         interval=5)

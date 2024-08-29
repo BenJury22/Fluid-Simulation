@@ -15,7 +15,8 @@ def main():
     time_step = 0.1
     frame_number = 1001
 
-    # Force Variables 
+    # Force Variables
+    phys_constants = {"g": 9.81}
     g = 9.81 # Acceleration due to gravity ms^-2
 
     # IC & BC variables
@@ -23,40 +24,31 @@ def main():
     xy_boundaries = [10, 10]
 
     # Generate Initial Conditions
-    position = IC.initialise_particles(num, xy_boundaries)
-    velocity = IC.initialise_velocity()
+    initial_position = IC.initialise_particles(num, xy_boundaries)
+    initial_velocity = IC.initialise_velocity()
 
     # Generate Boundary Conditions
-    # boundary_conditions = BC.generate_BC()
+    boundary_conditions = BC.generate_BC()
 
-    # Initialise plotting axis
-    #fig, ax = plt.subplots()
-    #ax.xaxis.set_ticks([])                                                #Remove axis labels
-    #ax.yaxis.set_ticks([])
-    #c = position[:,1] # TEMP set colour based on y value
-    # scat = ax.scatter(position[:,0], position[:,1], c=c, cmap="seismic", edgecolor="k")
-    fig = plt.figure()
-    s = plt.scatter(position[:,0], position[:,1])
-    plt.show()
-
-
-  
     # Plotting
     # TODO create and run plotting/animation function.
-    Animation = an.AnimatedScatter(num=500, data_stream_func=update, 
+    Animation = an.AnimatedScatter(num=500, data_stream_func=new_pos, 
                     cmap="hot", point_size=50, 
                     xlim=(-0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
-                    interval=5)
-    #scat.set_offsets(position)                  #x and y values
-    #scat.set_array(position[:,1])
-    s.setdata()
-    plt.show(position[:,0], position[:,1])
+                    interval=5,
+                    time_steps=time_step,
+                    position=initial_position,
+                    velocity=initial_velocity,
+                    phys_constants=phys_constants,
+                    boundary_conditions=boundary_conditions)
+    
+    plt.show()
 
 def initilise():
     # Initialise simulation
     pass
 
-def update(time_step, position, velocity, phys_constants, boundary_conditions):
+def new_pos(time_step=None, position=None, velocity=None, phys_constants=None, boundary_conditions=None):
     while True:
         # Calculate changes in velocity due to forces
         gravity_dv = forces.apply_gravity(position, time_step, phys_constants["g"])
