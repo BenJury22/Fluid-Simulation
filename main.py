@@ -1,5 +1,6 @@
 # Import Standard Libraries
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Import Custom Functions
 import forces
@@ -28,6 +29,17 @@ def main():
     # Generate Boundary Conditions
     # boundary_conditions = BC.generate_BC()
 
+    # Initialise plotting axis
+    #fig, ax = plt.subplots()
+    #ax.xaxis.set_ticks([])                                                #Remove axis labels
+    #ax.yaxis.set_ticks([])
+    #c = position[:,1] # TEMP set colour based on y value
+    # scat = ax.scatter(position[:,0], position[:,1], c=c, cmap="seismic", edgecolor="k")
+    fig = plt.figure()
+    s = plt.scatter(position[:,0], position[:,1])
+    plt.show()
+
+
     # Run simulation
     times = np.arange(0, frame_number) * time_step
     for idt, t in enumerate(times):
@@ -45,7 +57,11 @@ def main():
 
         # Plotting
         # TODO create and run plotting/animation function.
-        an.draw_frame()
+        # an.draw_frame()
+        #scat.set_offsets(position)                  #x and y values
+        #scat.set_array(position[:,1])
+        s.setdata()
+        plt.show(position[:,0], position[:,1])
 
 
 if __name__ == '__main__':
