@@ -40,11 +40,26 @@ def main():
     plt.show()
 
 
-    # Run simulation
-    times = np.arange(0, frame_number) * time_step
-    for idt, t in enumerate(times):
+  
+    # Plotting
+    # TODO create and run plotting/animation function.
+    Animation = an.AnimatedScatter(num=500, data_stream_func=update, 
+                    cmap="hot", point_size=50, 
+                    xlim=(-0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
+                    interval=5)
+    #scat.set_offsets(position)                  #x and y values
+    #scat.set_array(position[:,1])
+    s.setdata()
+    plt.show(position[:,0], position[:,1])
+
+def initilise():
+    # Initialise simulation
+    pass
+
+def update(time_step, position, velocity, phys_constants, boundary_conditions):
+    while True:
         # Calculate changes in velocity due to forces
-        gravity_dv = forces.apply_gravity(position, time_step, g)
+        gravity_dv = forces.apply_gravity(position, time_step, phys_constants["g"])
         pressure_dv = forces.apply_pressure()
         viscosity_dv = forces.apply_viscosity()
 
@@ -55,16 +70,9 @@ def main():
         # Apply boundary conditions
         # position, velocity = BC.apply_BC(position, velocity, boundary_conditions)
 
-        # Plotting
-        # TODO create and run plotting/animation function.
-        Animation = an.AnimatedScatter(num=500, data_stream_func=final, 
-                        cmap="hot", point_size=50, 
-                        xlim=(-0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
-                        interval=5)
-        #scat.set_offsets(position)                  #x and y values
-        #scat.set_array(position[:,1])
-        s.setdata()
-        plt.show(position[:,0], position[:,1])
+        yield np.c_[position[:,0], position[:,1], position[:,1]] 
+
+
 
 
 if __name__ == '__main__':
