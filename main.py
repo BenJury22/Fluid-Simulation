@@ -45,7 +45,10 @@ def main():
 
         # Plotting
         # TODO create and run plotting/animation function.
-        an.draw_frame()
+        Animation = an.AnimatedScatter(num=500, data_stream_func=final, 
+                        cmap="hot", point_size=50, 
+                        xlim=(-0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
+                        interval=5)
 
 
 if __name__ == '__main__':
