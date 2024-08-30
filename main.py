@@ -13,28 +13,27 @@ def main():
     # Hard coded variables, to later be replaced by GUI or parameter file.
     # Time Variables
     time_step = 0.01
-    frame_number = 1001
 
     # Force Variables
     phys_constants = {"g": 9.81}
-    g = 9.81 # Acceleration due to gravity ms^-2
 
     # IC & BC variables
-    num = 100
+    num = 1000
     xy_boundaries = [10, 10]
+    xy_max_v = [4, 4]
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
-    initial_velocity = IC.initialise_velocity()
+    initial_velocity = IC.initialise_velocity(num, xy_max_v)
 
     # Generate Boundary Conditions
     boundary_conditions = BC.generate_BC()
 
     # Plotting
     # TODO create and run plotting/animation function.
-    Animation = an.AnimatedScatter(num=100, data_stream_func=new_pos, 
-                    cmap="hot", point_size=50, 
-                    xlim=(-0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
+    Animation = an.AnimatedScatter(data_stream_func=new_pos, 
+                    cmap="rainbow", point_size=50, 
+                    xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=5,
                     time_steps=time_step,
                     position=initial_position,
