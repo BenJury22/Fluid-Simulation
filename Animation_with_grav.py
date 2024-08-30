@@ -25,9 +25,9 @@ def final(num):
 class AnimatedScatter(object):
 
     def __init__(self, num=500, data_stream_func=None, cmap="seismic", 
-                 point_size=40, xlim=(-10, 15), ylim=(-10, 15), interval=5, **kwargs):
+                 point_size=40, xlim=(-10, 15), ylim=(-10, 15), interval=5):
         self.num = num
-        self.stream = data_stream_func(self.num, **kwargs) if data_stream_func else self.data_stream()
+        self.stream = data_stream_func(self.num) if data_stream_func else self.data_stream()
 
         self.cmap = cmap
         self.point_size = point_size
