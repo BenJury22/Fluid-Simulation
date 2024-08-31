@@ -19,10 +19,10 @@ def main():
 
     # IC & BC variables
     num = 50
-    xy_boundaries = [10, 10]
-    xy_max_v = [30, 30]
+    xy_boundaries = [10, 20]
+    xy_max_v = [10, 10]
     smoothing_radius = 1
-    viscosity_strength = 0.001
+    viscosity_strength = 0.0005
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
@@ -34,7 +34,7 @@ def main():
     # Plotting
     # TODO create and run plotting/animation function.
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="rainbow", point_size=50, 
+                    cmap="rainbow", point_size=20, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=5,
                     time_steps=time_step,
@@ -65,7 +65,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
         # Apply boundary conditions
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
 
-        yield np.c_[position[:,0], position[:,1], position[:,1]/10] 
+        yield np.c_[position[:,0], position[:,1], position[:,1]/boundary_conditions[1]] 
 
 
 

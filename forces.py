@@ -1,5 +1,4 @@
 import numpy as np
-import Smoothing_Function as SF
 
 """
 Gravity
