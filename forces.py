@@ -46,12 +46,9 @@ def calculate_dist(sample_point, particle_pos):
     return dist
 
 def velocity_mag(velocities):
-    length = len(velocities)
-    v = [0] * length
-    for i in range(length):
-        v[i] = ((velocities[i][0])**2 + (velocities[i][1])**2)**(1/2)
-    return v
-
+    velocities = np.array(velocities)
+    magnitudes = np.linalg.norm(velocities, axis=1)
+    return magnitudes
 
 
 
@@ -61,3 +58,5 @@ def smoothing_function(smoothing_radius, dist):
         influence = 0
     norm_influence = influence / ((np.pi * smoothing_radius**3)/3)         #Normalised by dividing by area of smoothing function (cone)
     return norm_influence
+
+
