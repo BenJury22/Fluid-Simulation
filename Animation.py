@@ -21,8 +21,8 @@ class AnimatedScatter(object):
     def setup_plot(self):
         x, y, c = next(self.stream).T                                              #Collect values from data_stream
         
-#        self.ax.xaxis.set_ticks([])                                                #Remove axis labels
-#        self.ax.yaxis.set_ticks([])
+        self.ax.xaxis.set_ticks([])                                                #Remove axis labels
+        self.ax.yaxis.set_ticks([])
         self.scat = self.ax.scatter(x, y, c=c, s=self.point_size, vmin=0, vmax=1,    # Plot scatter graph
                                     cmap=self.cmap, edgecolor="None")
         self.ax.axis([self.xlim[0], self.xlim[1], self.ylim[0], self.ylim[1]])
