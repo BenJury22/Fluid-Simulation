@@ -45,6 +45,15 @@ def calculate_dist(sample_point, particle_pos):
     dist = ((vector[0])**2 + (vector[1]**2))**(1/2)
     return dist
 
+def velocity_mag(velocities):
+    length = len(velocities)
+    v = [0] * length
+    for i in range(length):
+        v[i] = ((velocities[i][0])**2 + (velocities[i][1])**2)**(1/2)
+    return v
+
+
+
 
 def smoothing_function(smoothing_radius, dist):
     influence = smoothing_radius - dist      #This function is a straight line from (x = smoothing_radius, y = 0) to (x = 0, y = smoothing radius) and back down

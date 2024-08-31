@@ -34,7 +34,7 @@ def main():
     # Plotting
     # TODO create and run plotting/animation function.
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="PiYG", point_size=40, 
+                    cmap="jet", point_size=40, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=5,
                     time_steps=time_step,
@@ -64,8 +64,9 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
 
         # Apply boundary conditions
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
-
-        yield np.c_[position[:,0], position[:,1], position[:,1]/boundary_conditions[1]] 
+        v_mag = forces.velocity_mag(velocity)
+        c = [magnitude / 12 for magnitude in v_mag]
+        yield np.c_[position[:,0], position[:,1], c] 
 
 
 
