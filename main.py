@@ -18,8 +18,8 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 50
-    xy_boundaries = [10, 20]
+    num = 60
+    xy_boundaries = [10, 10]
     xy_max_v = [10, 10]
     smoothing_radius = 1
     viscosity_strength = 0.0005
@@ -34,7 +34,7 @@ def main():
     # Plotting
     # TODO create and run plotting/animation function.
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="rainbow", point_size=20, 
+                    cmap="PiYG", point_size=40, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=5,
                     time_steps=time_step,
