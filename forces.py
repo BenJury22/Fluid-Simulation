@@ -1,4 +1,5 @@
 import numpy as np
+import Smoothing_Function as SF
 
 """
 Gravity
@@ -20,16 +21,35 @@ def apply_pressure():
 """
 Viscosity
 """
-def apply_viscosity():
-    #TODO
-    return 0
-
+def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength):
+    length = len(positions)
+    dvs = np.zeros((length, 2))
+    for i in range(length):
+        particle = positions[i]
+        velocity = velocities[i]
+        viscosity_force = 0
+        for j in range(length):
+            distance = calculate_dist(particle, positions[j])
+            influence = smoothing_function(smoothing_radius, distance)
+            viscosity_force += (velocities[j] - velocity) * influence
+        dv = viscosity_force * viscosity_strength
+        dvs[i] = dv
+    return dvs
 # The smoothing function is the function which allows us to find the density at all
 # points in the fluid. We could use a variety of functions to do this, i have used a
 # very simple one
-def smoothing_function(radius, particle_distance):
-    return abs(radius - particle_distance)
 
-def target_density(num, xy_boundaries):
-    x_boundary, y_boundary = xy_boundaries
-    return num / (x_boundary * y_boundary)
+def calculate_dist(sample_point, particle_pos):
+    vector = np.zeros((2))
+    vector[0] = sample_point[0] - particle_pos[0]              #Difference in x
+    vector[1] = sample_point[1] - particle_pos[1]              #Difference in y
+    dist = ((vector[0])**2 + (vector[1]**2))**(1/2)
+    return dist
+
+
+def smoothing_function(smoothing_radius, dist):
+    influence = smoothing_radius - dist      #This function is a straight line from (x = smoothing_radius, y = 0) to (x = 0, y = smoothing radius) and back down
+    if dist > smoothing_radius:
+        influence = 0
+    norm_influence = influence / ((np.pi * smoothing_radius**3)/3)         #Normalised by dividing by area of smoothing function (cone)
+    return norm_influence
