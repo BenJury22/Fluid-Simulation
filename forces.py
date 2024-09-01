@@ -10,12 +10,7 @@ def apply_gravity(position, time_step, g):
     # Calculate velocity change based on gravity
     return np.ones(position.shape) * g_vector * time_step
 
-"""
-Pressure
-"""
-def apply_pressure():
-    #TODO
-    return 0
+
 
 """
 Viscosity
@@ -34,9 +29,14 @@ def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength)
         dv = viscosity_force * viscosity_strength
         dvs[i] = dv
     return dvs
-# The smoothing function is the function which allows us to find the density at all
-# points in the fluid. We could use a variety of functions to do this, i have used a
-# very simple one
+
+
+"""
+Pressure
+"""
+def apply_pressure(positions, ):
+    #Pressure_dv = sum over all partciles(Pressure * direction * smoothing_grad / density)
+    return 0
 
 def calculate_dist(sample_point, particle_pos):
     vector = np.zeros((2))
@@ -58,5 +58,28 @@ def smoothing_function(smoothing_radius, dist):
         influence = 0
     norm_influence = influence / ((np.pi * smoothing_radius**3)/3)         #Normalised by dividing by area of smoothing function (cone)
     return norm_influence
+
+def smoothing_grad(smoothing_radius, dist):
+    if -smoothing_radius < dist < 0:
+        return 1
+    elif 0 < dist < smoothing_radius:
+        return -1
+    elif dist == 0:
+        return 1
+    else:
+        return 0
+    
+
+def Av_density(num, xy_bounds):
+    x_bound, y_bound = xy_bounds
+    return num / (x_bound * y_bound)
+
+def find_pressure(density, Av_density, pressure_strength):
+    density_diff = density - Av_density
+    return density_diff * pressure_strength
+
+
+
+
 
 
