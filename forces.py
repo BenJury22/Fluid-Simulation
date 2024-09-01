@@ -34,7 +34,7 @@ def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength)
 """
 Pressure
 """
-def apply_pressure(positions, ):
+def apply_pressure():
     #Pressure_dv = sum over all partciles(Pressure * direction * smoothing_grad / density)
     return 0
 
