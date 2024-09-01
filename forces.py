@@ -1,4 +1,5 @@
 import numpy as np
+import Density as den
 
 """
 Gravity
@@ -34,8 +35,24 @@ def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength)
 """
 Pressure
 """
-def apply_pressure():
+def apply_pressure(positions, smoothing_radius, xy_bounds, pressure_strength):
     #Pressure_dv = sum over all partciles(Pressure * direction * smoothing_grad / density)
+    num = len(positions)
+    dvs = np.zeros((num, 2))
+    average_density = Av_density(num, xy_bounds)
+    for i in range(num):
+        pressure_force = 0
+        for j in range(num):
+            density = find_density(positions[j], positions, smoothing_radius)
+            pressure = find_pressure(density, average_density, pressure_strength)
+            distance = calculate_dist(positions[i], positions[j])
+#            direction = (positions[j] - positions[i]) / distance
+            grad = smoothing_grad(smoothing_radius, distance)
+            pressure_force += pressure * grad  / density
+        dvs[i] = pressure_force
+    return dvs
+
+            
     return 0
 
 def calculate_dist(sample_point, particle_pos):
@@ -73,6 +90,13 @@ def smoothing_grad(smoothing_radius, dist):
 def Av_density(num, xy_bounds):
     x_bound, y_bound = xy_bounds
     return num / (x_bound * y_bound)
+
+def find_density(sample_point, position, smoothing_radius):
+    influence = 0
+    for i in range(len(position)):
+        dist = calculate_dist(sample_point, position[i])
+        influence += smoothing_function(smoothing_radius, dist)
+    return influence
 
 def find_pressure(density, Av_density, pressure_strength):
     density_diff = density - Av_density
