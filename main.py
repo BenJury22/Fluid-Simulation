@@ -12,17 +12,17 @@ import Animation as an
 def main():
     # Hard coded variables, to later be replaced by GUI or parameter file.
     # Time Variables
-    time_step = 0.01
+    time_step = 0.002
 
     # Force Variables
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 10
+    num = 20
     xy_boundaries = [10, 10]
     xy_max_v = [10, 10]
-    smoothing_radius = 10
-    viscosity_strength = 0.0005
+    smoothing_radius = 1
+    viscosity_strength = 0.001
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
@@ -34,7 +34,7 @@ def main():
     # Plotting
     # TODO create and run plotting/animation function.
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="jet", point_size=100, 
+                    cmap="seismic", point_size=100, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=5,
                     time_steps=time_step,
@@ -54,19 +54,19 @@ def initilise():
 def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0, viscosity_strength = 0):
     while True:
         # Calculate changes in velocity due to forces
-        gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
-        pressure_dv = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.005)     
-        viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
+#        gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
+        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.1)     
+#        viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
 
         # Calculate new velocity and position
-        velocity += gravity_dv + pressure_dv + viscosity_dv
+        velocity += pressure_dv
         position += velocity * time_steps
 
         # Apply boundary conditions
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
-        # v_mag = forces.velocity_mag(velocity)
-        # c = [magnitude / 12 for magnitude in v_mag]
-        c = forces.velocity_mag(velocity) / 10
+        
+        average_density = forces.Av_density(len(position), boundary_conditions)
+        c = densities / average_density
         yield np.c_[position[:,0], position[:,1], c] 
 
 

@@ -39,18 +39,22 @@ def apply_pressure(positions, smoothing_radius, xy_bounds, pressure_strength):
     #Pressure_dv = sum over all partciles(Pressure * direction * smoothing_grad / density)
     num = len(positions)
     dvs = np.zeros((num, 2))
+    densities = np.zeros((num))
     average_density = Av_density(num, xy_bounds)
     for i in range(num):
         pressure_force = 0
         for j in range(num):
+            if j == i:
+                continue
             density = find_density(positions[j], positions, smoothing_radius)
             pressure = find_pressure(density, average_density, pressure_strength)
             distance = calculate_dist(positions[i], positions[j])
-#            direction = (positions[j] - positions[i]) / distance
+            direction = (positions[j] - positions[i]) / distance
             grad = smoothing_grad(smoothing_radius, distance)
-            pressure_force += pressure * grad  / density
+            pressure_force += pressure * grad * direction / density
+        densities[i] = density
         dvs[i] = pressure_force
-    return dvs
+    return dvs, densities
 
             
     return 0

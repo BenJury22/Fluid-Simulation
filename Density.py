@@ -30,17 +30,17 @@ def calculate_target_density(num, xy_boundaries):
 
 def main():
 
-    num = 20000
+    num = 100
     xy_boundaries = [10, 10]
     position = IC.initialise_particles(num, xy_boundaries)
     sample_position = [5, 5]
-    smoothing_radius = 5
+    smoothing_radius = 1
 
     start_time = time.process_time()
-    x = find_density(sample_position, position, smoothing_radius)
+    x = find_density(position[0], position, smoothing_radius)
     print(x)
 
-#    plot_graph(position, sample_position)
+    plot_graph(position, sample_position)
 
     end_time = time.process_time()
     print(f"CPU time used: {end_time - start_time} seconds")
