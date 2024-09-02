@@ -2,15 +2,15 @@ import numpy as np
 import initialconditions as IC
 import matplotlib.pyplot as plt
 import time
-import Smoothing_Function as SF
+import forces
 
 
 
 def find_density(sample_point, position, smoothing_radius):
     influence = 0
     for i in range(len(position)):
-        dist = SF.calculate_dist(sample_point, position[i])
-        influence += SF.smoothing_function(smoothing_radius, dist)
+        dist = forces.calculate_dist(sample_point, position[i])
+        influence += forces.smoothing_function(smoothing_radius, dist)
     return influence
 
 
