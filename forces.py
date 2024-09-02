@@ -99,8 +99,6 @@ def find_density(sample_point, position, smoothing_radius):
     influence = 0
     for i in range(len(position)):
         dist = calculate_dist(sample_point, position[i])
-        if dist == 0:
-            continue
         influence += smoothing_function(smoothing_radius, dist)
     return influence
 
