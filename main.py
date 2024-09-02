@@ -18,10 +18,10 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 20
+    num = 80
     xy_boundaries = [10, 10]
-    xy_max_v = [30, 30]
-    smoothing_radius = 1
+    xy_max_v = [5, 5]
+    smoothing_radius = 2
     viscosity_strength = 0.001
 
     # Generate Initial Conditions
@@ -36,7 +36,7 @@ def main():
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
                     cmap="seismic", point_size=50, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
-                    interval=10,
+                    interval=20,
                     time_steps=time_step,
                     position=initial_position,
                     velocity=initial_velocity,
@@ -55,11 +55,11 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
     while True:
         # Calculate changes in velocity due to forces
         gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
-        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.05)     
+        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.2)     
         viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
 
         # Calculate new velocity and position
-        velocity += gravity_dv + pressure_dv + viscosity_dv
+        velocity += pressure_dv
         position += velocity * time_steps
 
         # Apply boundary conditions
@@ -68,7 +68,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
         average_density = forces.Av_density(len(position), boundary_conditions)
         c = densities / average_density
 
-        yield np.c_[position[:,0], position[:,1], c/10] 
+        yield np.c_[position[:,0], position[:,1], c/3] 
 
 
 
