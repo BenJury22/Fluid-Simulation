@@ -36,7 +36,7 @@ def main():
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
                     cmap="seismic", point_size=100, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
-                    interval=20,
+                    interval=10,
                     time_steps=time_step,
                     position=initial_position,
                     velocity=initial_velocity,
@@ -65,6 +65,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
         # Apply boundary conditions
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
 
+        # Finding colour (dependent on density)
         average_density = forces.Av_density(len(position), boundary_conditions)
         c = densities / average_density
 

@@ -22,7 +22,7 @@ class AnimatedScatter(object):
         x, y, c = next(self.stream).T                                              #Collect values from data_stream
         
         self.ax.xaxis.set_ticks([])                                                #Remove axis labels
-#        self.ax.yaxis.set_ticks([])
+        self.ax.yaxis.set_ticks([])
         self.ax.spines['bottom'].set_color('pink')
         self.ax.spines['top'].set_color('pink')
         self.ax.spines['right'].set_color('pink')
