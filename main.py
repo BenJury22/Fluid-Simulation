@@ -21,7 +21,7 @@ def main():
     num = 20
     xy_boundaries = [10, 10]
     xy_max_v = [10, 10]
-    smoothing_radius = 1
+    smoothing_radius = 5
     viscosity_strength = 0.001
 
     # Generate Initial Conditions
