@@ -18,9 +18,9 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 100
+    num = 50
     xy_boundaries = [10, 10]
-    xy_max_v = [0, 0]
+    xy_max_v = [5, 5]
     smoothing_radius = 1
     viscosity_strength = 0.05
 

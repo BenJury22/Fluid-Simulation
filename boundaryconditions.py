@@ -1,8 +1,3 @@
-import numpy as np
-
-def generate_BC():
-    #TODO
-    return 0
 
 def apply_BC(position, velocity, boundary_conditions):
     x_bound, y_bound = boundary_conditions
