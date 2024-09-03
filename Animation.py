@@ -5,7 +5,7 @@ import numpy as np
 class AnimatedScatter(object):
 
     def __init__(self, num=500, data_stream_func=None, cmap="seismic", 
-                 point_size=40, xlim=(-10, 15), ylim=(-10, 15), interval=5, **kwargs):
+                 point_size=40, xlim=(-10, 10), ylim=(-10, 10), interval=5, **kwargs):
         self.num = num
         self.stream = data_stream_func(**kwargs) if data_stream_func else self.data_stream()
         self.cmap = cmap
@@ -23,6 +23,13 @@ class AnimatedScatter(object):
         
         self.ax.xaxis.set_ticks([])                                                #Remove axis labels
         self.ax.yaxis.set_ticks([])
+        self.ax.spines['bottom'].set_color('pink')
+        self.ax.spines['top'].set_color('pink')
+        self.ax.spines['right'].set_color('pink')
+        self.ax.spines['left'].set_color('pink')
+        self.ax.set_facecolor('k')
+        self.fig.patch.set_facecolor('k')
+
         self.scat = self.ax.scatter(x, y, c=c, s=self.point_size, vmin=0, vmax=1,    # Plot scatter graph
                                     cmap=self.cmap, edgecolor="None")
         self.ax.axis([self.xlim[0], self.xlim[1], self.ylim[0], self.ylim[1]])

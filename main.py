@@ -18,11 +18,11 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 50
+    num = 60
     xy_boundaries = [10, 10]
-    xy_max_v = [30, 30]
+    xy_max_v = [0, 0]
     smoothing_radius = 1
-    viscosity_strength = 0.001
+    viscosity_strength = 0.05
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
@@ -34,9 +34,9 @@ def main():
     # Plotting
     # TODO create and run plotting/animation function.
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="rainbow", point_size=50, 
+                    cmap="seismic", point_size=50, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
-                    interval=5,
+                    interval=20,
                     time_steps=time_step,
                     position=initial_position,
                     velocity=initial_velocity,
@@ -55,17 +55,26 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
     while True:
         # Calculate changes in velocity due to forces
         gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
-        pressure_dv = forces.apply_pressure()     
+        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.5)     
         viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
 
         # Calculate new velocity and position
-        velocity += gravity_dv + pressure_dv + viscosity_dv
+        velocity += pressure_dv + gravity_dv + viscosity_dv
         position += velocity * time_steps
 
         # Apply boundary conditions
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
 
-        yield np.c_[position[:,0], position[:,1], position[:,1]/10] 
+        # Finding colour (dependent on density)
+
+#         average_density = forces.Av_density(len(position), boundary_conditions)
+#         c = densities / average_density
+
+        # Finding Colour (dependent on speed)
+        c = forces.velocity_mag(velocity)
+    
+
+        yield np.c_[position[:,0], position[:,1], c/10] 
 
 
 
