@@ -18,7 +18,7 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 60
+    num = 100
     xy_boundaries = [10, 10]
     xy_max_v = [0, 0]
     smoothing_radius = 1
@@ -63,7 +63,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
         position += velocity * time_steps
 
         # Apply boundary conditions
-        position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
+        position, velocity = BC.apply_BC(position, velocity, boundary_conditions)
 
         # Finding colour (dependent on density)
 
