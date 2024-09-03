@@ -24,7 +24,8 @@ def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength)
         velocity = velocities[i]
         viscosity_force = 0
         for j in range(num):
-            influence = smoothing_function_test(smoothing_radius, particle, positions[j])
+            dist = np.linalg.norm(positions[j] - particle)
+            influence = smoothing_function(smoothing_radius, dist)
             viscosity_force += (velocities[j] - velocity) * influence
         dv = viscosity_force * viscosity_strength
         dvs[i] = dv
@@ -51,7 +52,7 @@ def apply_pressure(positions, smoothing_radius, xy_bounds, pressure_strength):
             pressure = find_pressure(density, average_density, pressure_strength)
             distance = calculate_dist(positions[i], positions[j])
             direction = (positions[j] - positions[i]) / distance
-            grad = smoothing_grad_test(smoothing_radius, positions[i], positions[j])
+            grad = smoothing_grad(smoothing_radius, distance)
             pressure_force += pressure * grad * direction / density
         dvs[i] = pressure_force
     return dvs, densities
@@ -89,24 +90,12 @@ def Av_density(num, xy_bounds):
     return num / (x_bound * y_bound)
 
 def find_density(sample_point, position, smoothing_radius):
-    influence = 0
+    density = 0
     for i in range(len(position)):
-        influence += smoothing_function_test(smoothing_radius, sample_point, position[i])
-    return influence
+        dist = np.linalg.norm(sample_point - position[i])
+        density += smoothing_function(smoothing_radius, dist)
+    return density
 
 def find_pressure(density, Av_density, pressure_strength):
     density_diff = density - Av_density
     return density_diff * pressure_strength
-
-def smoothing_grad_test(smoothing_radius, sample_point, particle):
-    if  sample_point[0] - smoothing_radius < particle[0] < sample_point[0] + smoothing_radius and sample_point[1] - smoothing_radius < particle[1] < sample_point[1] +smoothing_radius:
-        return -1
-    return 0
-
-def smoothing_function_test(smoothing_radius, sample_point, particle):
-        if  sample_point[0] - smoothing_radius < particle[0] < sample_point[0] + smoothing_radius and sample_point[1] - smoothing_radius < particle[1] < sample_point[1] +smoothing_radius:
-            vector = np.array(sample_point) - np.array(particle)
-            dist = np.linalg.norm(vector)
-            influence = smoothing_radius - dist
-            return influence / ((np.pi * smoothing_radius**3)/3)
-        return 0

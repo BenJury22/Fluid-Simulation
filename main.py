@@ -18,7 +18,7 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 100
+    num = 60
     xy_boundaries = [10, 10]
     xy_max_v = [0, 0]
     smoothing_radius = 1
@@ -34,9 +34,9 @@ def main():
     # Plotting
     # TODO create and run plotting/animation function.
     Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="seismic", point_size=100, 
+                    cmap="seismic", point_size=50, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
-                    interval=10,
+                    interval=20,
                     time_steps=time_step,
                     position=initial_position,
                     velocity=initial_velocity,
@@ -66,10 +66,15 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions, time_steps)
 
         # Finding colour (dependent on density)
-        average_density = forces.Av_density(len(position), boundary_conditions)
-        c = densities / average_density
 
-        yield np.c_[position[:,0], position[:,1], c/3.5] 
+#         average_density = forces.Av_density(len(position), boundary_conditions)
+#         c = densities / average_density
+
+        # Finding Colour (dependent on speed)
+        c = forces.velocity_mag(velocity)
+    
+
+        yield np.c_[position[:,0], position[:,1], c/10] 
 
 
 
