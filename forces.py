@@ -13,18 +13,20 @@ def apply_gravity(position, time_step, g):
 Viscosity
 """
 def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength):
-    num = len(positions)
-    dvs = np.zeros((num, 2))
-    for i in range(num):
-        particle = positions[i]
-        velocity = velocities[i]
-        viscosity_force = 0
-        for j in range(num):
-            dist = np.linalg.norm(positions[j] - particle)
-            influence = smoothing_function(smoothing_radius, dist)
-            viscosity_force += (velocities[j] - velocity) * influence
-        dv = viscosity_force * viscosity_strength
-        dvs[i] = dv
+    positions = np.asarray(positions)
+    velocities = np.asarray(velocities)
+
+    pos_diff = -positions[:, np.newaxis, :] + positions[np.newaxis, :, :]
+    distances = np.linalg.norm(pos_diff, axis=2)
+
+    influences = smoothing_function(smoothing_radius, distances)
+
+    velocity_diff = -velocities[:, np.newaxis, :] + velocities[np.newaxis, :, :]
+
+    viscosity_forces = np.sum(velocity_diff * influences[:, :, np.newaxis], axis=1)
+    
+    dvs = viscosity_forces * viscosity_strength
+    
     return dvs
 
 
