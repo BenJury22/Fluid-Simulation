@@ -13,8 +13,6 @@ def apply_gravity(position, time_step, g):
 Viscosity
 """
 def apply_viscosity(positions, velocities, smoothing_radius, viscosity_strength):
-    positions = np.asarray(positions)
-    velocities = np.asarray(velocities)
 
     pos_diff = -positions[:, np.newaxis, :] + positions[np.newaxis, :, :]
     distances = np.linalg.norm(pos_diff, axis=2)
