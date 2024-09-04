@@ -1,26 +1,22 @@
-import numpy as np
 
-def generate_BC():
-    #TODO
-    return 0
-
-def apply_BC(position, velocity, boundary_conditions, time_step):
-    num = len(position)
+def apply_BC(position, velocity, boundary_conditions):
     x_bound, y_bound = boundary_conditions
-    for i in range(num):
-        if position[i, 0] < 0:
-            velocity[i, 0] = -velocity[i, 0]
-            position[i,0] = -position[i,0]
-        elif position[i, 0] > x_bound:
-            velocity[i, 0] = -velocity[i, 0]
-            position[i, 0] = (2*x_bound) - position[i,0]
+    
+    # Reflect positions at x boundary
+    mask_x_low = position[:, 0] < 0
+    mask_x_high = position[:, 0] > x_bound
+    
+    velocity[mask_x_low | mask_x_high, 0] *= -1
+    position[mask_x_low, 0] *= -1
+    position[mask_x_high, 0] = 2 * x_bound - position[mask_x_high, 0]
 
-        if position[i, 1] < 0:
-            velocity[i, 1] = -velocity[i, 1]
-            position[i, 1] = -position[i, 1]
-        elif position[i, 1] > y_bound:
-            velocity[i, 1] = -velocity[i, 1]
-            position[i, 1] = (2*y_bound) - position[i, 1]
-            
+    # Reflect positions at y boundary
+    mask_y_low = position[:, 1] < 0
+    mask_y_high = position[:, 1] > y_bound
+    
+    velocity[mask_y_low | mask_y_high, 1] *= -1
+    position[mask_y_low, 1] *= -1
+    position[mask_y_high, 1] = 2 * y_bound - position[mask_y_high, 1]
+    
     return position, velocity
 
