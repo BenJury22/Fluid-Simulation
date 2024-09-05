@@ -13,7 +13,7 @@ import Animation as an
 def main():
     # Hard coded variables, to later be replaced by GUI or parameter file.
     # Time Variables
-    time_step = 0.01
+    time_step = 0.015
 
     # Force Variables
     phys_constants = {"g": 9.81}
@@ -70,7 +70,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
 #        c = forces.velocity_mag(velocity)
     
 
-        yield np.c_[position[:,0], position[:,1], c/3] 
+        yield np.c_[position[:,0], position[:,1], c/2.5] 
 
 
 if __name__ == '__main__':

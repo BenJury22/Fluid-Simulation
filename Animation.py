@@ -15,12 +15,21 @@ class AnimatedScatter(object):
         self.ylim = ylim
         self.interval = interval
         self.root = root
+        self.running = True
 
         self.fig, self.ax = plt.subplots()                                      # Setup the figure and axes
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)  # A tk.DrawingArea.
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+        self.start_button = tk.Button(self.root, text = "Start", command = self.start)
+        self.start_button.pack(side = tk.LEFT)
+
+        self.stop_button = tk.Button(self.root, text = "Stop", command = self.stop)
+        self.stop_button.pack(side = tk.LEFT)
+
+        self.root.bind("<space>", self.start_stop)
 
         self.ani = animation.FuncAnimation(self.fig, self.update, interval=self.interval,    # Setup FuncAnimation (this calls setup_plot and update)
                                           init_func=self.setup_plot, blit=None)
@@ -44,11 +53,22 @@ class AnimatedScatter(object):
 
 
     def update(self, i):
+        if not self.running:
+            return self.scat
         data = next(self.stream)                            #Collect the next timesteps set of data
         self.scat.set_offsets(data[:, :2])                  #x and y values
         self.scat.set_array(data[:, 2])                     #colour value
 
         return self.scat,
+
+    def start(self):
+        self.running = True
+    
+    def stop(self):
+        self.running = False
+
+    def start_stop(self, event = None):
+        self.running = not self.running
 
 
 
