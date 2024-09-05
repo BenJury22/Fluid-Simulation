@@ -1,5 +1,5 @@
 import numpy as np
-import Density as den
+import tkinter as tk
 
 """
 Gravity
@@ -53,19 +53,6 @@ def apply_pressure(positions, smoothing_radius, xy_bounds, pressure_strength):
 
     return total_pressure_forces, densities
 
-
-def calculate_dist(sample_point, particle_pos):
-    vector = np.array(sample_point) - np.array(particle_pos)
-    dist = np.linalg.norm(vector)
-    return dist
-
-def velocity_mag(velocities):
-    velocities = np.array(velocities)
-    magnitudes = np.linalg.norm(velocities, axis=1)
-    return magnitudes
-
-
-
 def smoothing_function(smoothing_radius, dist):
     influence = np.maximum(smoothing_radius - dist, 0)
     norm_influence = influence / ((np.pi * smoothing_radius**3) / 3)
@@ -77,7 +64,6 @@ def smoothing_grad(smoothing_radius, distances):
     grad[mask] = -1
     return grad
     
-
 def Av_density(num, xy_bounds):
     x_bound, y_bound = xy_bounds
     return num / (x_bound * y_bound)
@@ -90,3 +76,15 @@ def find_density(sample_point, positions, smoothing_radius):
 def find_pressures(densities, Av_density, pressure_strength):
     density_diff = densities - Av_density
     return density_diff * pressure_strength
+
+def velocity_mag(velocities):
+    velocities = np.array(velocities)
+    magnitudes = np.linalg.norm(velocities, axis=1)
+    return magnitudes
+
+"""
+Mouse Force
+"""
+
+def mouse_force():
+    return 0

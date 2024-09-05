@@ -1,6 +1,7 @@
 # Import Standard Libraries
 import numpy as np
 import matplotlib.pyplot as plt
+import tkinter as tk
 
 # Import Custom Functions
 import forces
@@ -28,13 +29,12 @@ def main():
     initial_position = IC.initialise_particles(num, xy_boundaries)
     initial_velocity = IC.initialise_velocity(num, xy_max_v)
 
-    # Generate Boundary Conditions
-    #boundary_conditions = BC.generate_BC()
+    root = tk.Tk()
+    root.geometry("1500x800")
+    root.title("Fluid Simulation")
 
-    # Plotting
-    # TODO create and run plotting/animation function.
-    Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="seismic", point_size=30, 
+    Animation = an.AnimatedScatter(data_stream_func=new_pos, root = root,
+                    cmap="rainbow", point_size=30, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=20,
                     time_steps=time_step,
@@ -44,12 +44,8 @@ def main():
                     boundary_conditions=xy_boundaries,
                     smoothing_radius = smoothing_radius,
                     viscosity_strength = viscosity_strength)
-    
-    plt.show()
 
-def initilise():
-    # Initialise simulation
-    pass
+    root.mainloop()
 
 def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0, viscosity_strength = 0):
     while True:
@@ -75,8 +71,6 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
     
 
         yield np.c_[position[:,0], position[:,1], c/3] 
-
-
 
 
 if __name__ == '__main__':

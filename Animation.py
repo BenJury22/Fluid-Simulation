@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import numpy as np
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class AnimatedScatter(object):
 
-    def __init__(self, num=500, data_stream_func=None, cmap="seismic", 
+    def __init__(self, root, num=500, data_stream_func=None, cmap="seismic", 
                  point_size=40, xlim=(-10, 10), ylim=(-10, 10), interval=5, **kwargs):
         self.num = num
         self.stream = data_stream_func(**kwargs) if data_stream_func else self.data_stream()
@@ -13,8 +14,14 @@ class AnimatedScatter(object):
         self.xlim = xlim
         self.ylim = ylim
         self.interval = interval
+        self.root = root
 
         self.fig, self.ax = plt.subplots()                                      # Setup the figure and axes
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)  # A tk.DrawingArea.
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
         self.ani = animation.FuncAnimation(self.fig, self.update, interval=self.interval,    # Setup FuncAnimation (this calls setup_plot and update)
                                           init_func=self.setup_plot, blit=None)
 
