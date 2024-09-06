@@ -16,22 +16,26 @@ def main():
     time_step = 0.01
 
     # Force Variables
-    phys_constants = {"g": 9.81}
+    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 0.5}
 
     # IC & BC variables
     num = 500
     xy_boundaries = [10, 10]
     xy_max_v = [5, 5]
     smoothing_radius = 0.5
-    viscosity_strength = 0.05
+
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
     initial_velocity = IC.initialise_velocity(num, xy_max_v)
 
     root = tk.Tk()
-    root.geometry("1500x800")
+    root.geometry("1500x900")
     root.title("Fluid Simulation")
+
+    for key, value in phys_constants.items():
+        label = tk.Label(root, text=f"{key} = {value}", font = ('arial', 14))
+        label.pack()
 
     Animation = an.AnimatedScatter(data_stream_func=new_pos, root = root,
                     cmap="rainbow", point_size=30, 
@@ -42,17 +46,16 @@ def main():
                     velocity=initial_velocity,
                     phys_constants=phys_constants,
                     boundary_conditions=xy_boundaries,
-                    smoothing_radius = smoothing_radius,
-                    viscosity_strength = viscosity_strength)
+                    smoothing_radius = smoothing_radius)
 
     root.mainloop()
 
-def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0, viscosity_strength = 0):
+def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0):
     while True:
         # Calculate changes in velocity due to forces
-        gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
-        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.6)     
-        viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
+        gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["Gravitational_Acceleration"])
+        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, phys_constants["Pressure_Strength"])     
+        viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, phys_constants["Viscosity_Strength"])
 
         # Calculate new velocity and position
         velocity +=  pressure_dv + gravity_dv + viscosity_dv
