@@ -22,7 +22,7 @@ def main():
     num = 500
     xy_boundaries = [10, 10]
     xy_max_v = [5, 5]
-    smoothing_radius = 0.4
+    smoothing_radius = 0.5
     viscosity_strength = 0.05
 
     # Generate Initial Conditions
@@ -63,14 +63,14 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
 
         # Finding colour (dependent on density)
 
-        average_density = forces.Av_density(len(position), boundary_conditions)
-        c = densities / average_density
+#         average_density = forces.Av_density(len(position), boundary_conditions)
+#         c = densities / average_density
 
         # Finding Colour (dependent on speed)
-#        c = forces.velocity_mag(velocity)
+        c = forces.velocity_mag(velocity)
     
 
-        yield np.c_[position[:,0], position[:,1], c/2] 
+        yield np.c_[position[:,0], position[:,1], c/10] 
 
 
 if __name__ == '__main__':
