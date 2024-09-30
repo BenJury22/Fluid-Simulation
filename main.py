@@ -16,7 +16,7 @@ def main():
     time_step = 0.01
 
     # Force Variables
-    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.001, "Pressure_Strength": 1}
+    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.05, "Pressure_Strength": 2}
 
     # IC & BC variables
     num = 500
@@ -66,14 +66,14 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
 
         # Finding colour (dependent on density)
 
-#         average_density = forces.Av_density(len(position), boundary_conditions)
-#         c = densities / average_density
+        average_density = forces.Av_density(len(position), boundary_conditions)
+        c = densities / average_density
 
         # Finding Colour (dependent on speed)
-        c = forces.velocity_mag(velocity)
+#        c = forces.velocity_mag(velocity)
     
 
-        yield np.c_[position[:,0], position[:,1], c/10] 
+        yield np.c_[position[:,0], position[:,1], c/3] 
 
 
 if __name__ == '__main__':
