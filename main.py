@@ -16,14 +16,14 @@ def main():
     time_step = 0.01
 
     # Force Variables
-    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.05, "Pressure_Strength": 2}
+    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 5, "Near_Pressure_Strength": 1}
 
     # IC & BC variables
     num = 500
     xy_boundaries = [10, 10]
     xy_max_v = [5, 5]
     smoothing_radius = 0.5
-
+    near_smoothing_radius = 0.2
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
@@ -46,15 +46,17 @@ def main():
                     velocity=initial_velocity,
                     phys_constants=phys_constants,
                     boundary_conditions=xy_boundaries,
-                    smoothing_radius = smoothing_radius)
+                    smoothing_radius = smoothing_radius,
+                    near_smoothing_radius = near_smoothing_radius)
 
     root.mainloop()
 
-def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0):
+def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0, near_smoothing_radius = 0):
     while True:
         # Calculate changes in velocity due to forces
         gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["Gravitational_Acceleration"])
-        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, phys_constants["Pressure_Strength"])     
+        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, near_smoothing_radius, boundary_conditions,
+                                                       phys_constants["Pressure_Strength"], phys_constants["Near_Pressure_Strength"])     
         viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, phys_constants["Viscosity_Strength"])
 
         # Calculate new velocity and position
