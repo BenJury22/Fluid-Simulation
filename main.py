@@ -1,6 +1,7 @@
 # Import Standard Libraries
 import numpy as np
 import matplotlib.pyplot as plt
+import tkinter as tk
 
 # Import Custom Functions
 import forces
@@ -15,26 +16,29 @@ def main():
     time_step = 0.01
 
     # Force Variables
-    phys_constants = {"g": 9.81}
+    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 5, "Near_Pressure_Strength": 1}
 
     # IC & BC variables
     num = 500
     xy_boundaries = [10, 10]
     xy_max_v = [5, 5]
     smoothing_radius = 0.5
-    viscosity_strength = 0.05
+    near_smoothing_radius = 0.2
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
     initial_velocity = IC.initialise_velocity(num, xy_max_v)
 
-    # Generate Boundary Conditions
-    #boundary_conditions = BC.generate_BC()
+    root = tk.Tk()
+    root.geometry("1500x900")
+    root.title("Fluid Simulation")
 
-    # Plotting
-    # TODO create and run plotting/animation function.
-    Animation = an.AnimatedScatter(data_stream_func=new_pos, 
-                    cmap="seismic", point_size=30, 
+    for key, value in phys_constants.items():
+        label = tk.Label(root, text=f"{key} = {value}", font = ('arial', 14))
+        label.pack()
+
+    Animation = an.AnimatedScatter(data_stream_func=new_pos, root = root,
+                    cmap="rainbow", point_size=30, 
                     xlim=(0, xy_boundaries[0]), ylim=(0, xy_boundaries[1]), 
                     interval=20,
                     time_steps=time_step,
@@ -43,20 +47,17 @@ def main():
                     phys_constants=phys_constants,
                     boundary_conditions=xy_boundaries,
                     smoothing_radius = smoothing_radius,
-                    viscosity_strength = viscosity_strength)
-    
-    plt.show()
+                    near_smoothing_radius = near_smoothing_radius)
 
-def initilise():
-    # Initialise simulation
-    pass
+    root.mainloop()
 
-def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0, viscosity_strength = 0):
+def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_conditions=0, smoothing_radius = 0, near_smoothing_radius = 0):
     while True:
         # Calculate changes in velocity due to forces
-        gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
-        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.6)     
-        viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
+        gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["Gravitational_Acceleration"])
+        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, near_smoothing_radius, boundary_conditions,
+                                                       phys_constants["Pressure_Strength"], phys_constants["Near_Pressure_Strength"])     
+        viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, phys_constants["Viscosity_Strength"])
 
         # Calculate new velocity and position
         velocity +=  pressure_dv + gravity_dv + viscosity_dv
@@ -75,8 +76,6 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
     
 
         yield np.c_[position[:,0], position[:,1], c/3] 
-
-
 
 
 if __name__ == '__main__':
