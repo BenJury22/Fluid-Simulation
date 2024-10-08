@@ -1,5 +1,4 @@
 import numpy as np
-import Density as den
 
 """
 Gravity
