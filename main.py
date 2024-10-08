@@ -23,9 +23,6 @@ def main():
     velocity_variation = [5, 5]
     mean_velocity = [10, 0]
 
-    xy_boundaries = [10, 10]
-    xy_max_v = [5, 5]
-
     # Smoothing parameters
     smoothing_radius = 0.5
     near_smoothing_radius = 0.2

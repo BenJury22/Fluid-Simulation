@@ -6,4 +6,3 @@ dependencies:
   - python=3.12
   - matplotlib=3.9
   - numpy=1.26.0
-  - vpython
