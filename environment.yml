@@ -1,4 +1,4 @@
-name: climate-env
+name: fluid-particle-env
 channels:
   - conda-forge
 
