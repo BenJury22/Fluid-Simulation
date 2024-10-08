@@ -15,7 +15,7 @@ def main():
     time_step = 0.01
 
     # Force variables
-    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 5, "Near_Pressure_Strength": 1}
+    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 1, "Near_Pressure_Strength": 1}
 
     # IC & BC variables
     num = 500
