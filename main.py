@@ -18,11 +18,11 @@ def main():
     phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 1, "Near_Pressure_Strength": 1}
 
     # IC & BC variables
-    num = 700
+    num = 800
     xy_boundaries = [20, 10]
     velocity_variation = [5, 5]
-    mean_velocity = [2, 2]
-    particle_spawn_boundaries = [[6, 14], [3, 7]]
+    mean_velocity = [0, 0]
+    particle_spawn_boundaries = [[5, 15], [3, 7]]
 
     # Smoothing parameters
     smoothing_radius = 0.5
