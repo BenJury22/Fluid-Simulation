@@ -18,17 +18,18 @@ def main():
     phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 1, "Near_Pressure_Strength": 1}
 
     # IC & BC variables
-    num = 500
+    num = 700
     xy_boundaries = [20, 10]
     velocity_variation = [5, 5]
-    mean_velocity = [10, 0]
+    mean_velocity = [2, 2]
+    particle_spawn_boundaries = [[6, 14], [3, 7]]
 
     # Smoothing parameters
     smoothing_radius = 0.5
     near_smoothing_radius = 0.2
 
     # Generate initial conditions
-    initial_position = IC.initialise_particles(num, xy_boundaries)
+    initial_position = IC.initialise_particles(num, particle_spawn_boundaries)
     initial_velocity = IC.initialise_velocity(num, velocity_variation, mean_velocity)
 
     # Initialise UI
