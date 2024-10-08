@@ -16,14 +16,14 @@ def main():
     time_step = 0.01
 
     # Force Variables
-    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 5, "Near_Pressure_Strength": 1}
+    phys_constants = {"Gravitational_Acceleration": 9.81, "Viscosity_Strength": 0.1, "Pressure_Strength": 0.5, "Near_Pressure_Strength": 1}
 
     # IC & BC variables
-    num = 500
+    num = 800
     xy_boundaries = [10, 10]
     xy_max_v = [5, 5]
     smoothing_radius = 0.5
-    near_smoothing_radius = 0.2
+    near_smoothing_radius = 0.5
 
     # Generate Initial Conditions
     initial_position = IC.initialise_particles(num, xy_boundaries)
@@ -34,8 +34,8 @@ def main():
     root.title("Fluid Simulation")
 
     for key, value in phys_constants.items():
-        label = tk.Label(root, text=f"{key} = {value}", font = ('arial', 14))
-        label.pack()
+        label = tk.Label(root, text=f"{key} = {value}", font = ('arial', 14, "bold"), padx = 20)
+        label.pack(anchor="w")
 
     Animation = an.AnimatedScatter(data_stream_func=new_pos, root = root,
                     cmap="rainbow", point_size=30, 
