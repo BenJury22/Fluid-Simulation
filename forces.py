@@ -48,7 +48,11 @@ def apply_pressure(positions, smoothing_radius, near_smoothing_radius, xy_bounds
     pressures, near_pressures = find_pressures(densities, near_densities, average_density, pressure_strength, near_pressure_strength)   #Inputs the density at each particle to find the pressure
     grads = smoothing_grad(smoothing_radius, distances)                        #Finds the smmothing grad for each element in the matrix
     
-    pressure_forces = (near_pressures[:, np.newaxis] + pressures[:, np.newaxis]) * grads[..., np.newaxis] * directions / densities[:, np.newaxis, np.newaxis]
+    shared_pressures = (near_pressures[:, np.newaxis] + near_pressures[np.newaxis, :]) / 2 + (pressures[:, np.newaxis] + pressures[np.newaxis, :]) / 2
+    shared_pressures /= densities[:, np.newaxis] * densities[np.newaxis, :]  # Divide by density product for normalization
+    
+    # Compute shared pressure forces
+    pressure_forces = shared_pressures[..., np.newaxis] * grads[..., np.newaxis] * directions
     total_pressure_forces = np.sum(pressure_forces, axis=1)          #Sums over contribution from each particle
 
     return total_pressure_forces, densities
