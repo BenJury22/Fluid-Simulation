@@ -57,39 +57,39 @@ def apply_pressure(positions, smoothing_radius, near_smoothing_radius, xy_bounds
     total_pressure_forces = np.sum(pressure_forces, axis=1)
     return total_pressure_forces
 
-
+# Linear smoothing function to calculate the weight of contribution of each surrounding particle
 def smoothing_function(smoothing_radius, dist):
     influence = np.maximum(smoothing_radius - dist, 0)
     norm_influence = influence / ((np.pi * smoothing_radius**3) / 3)
     return norm_influence
 
-
+# Gradient of the smoothing function
 def smoothing_grad(smoothing_radius, distances):
     mask = (0 < distances) & (distances < smoothing_radius)
     grad = np.zeros_like(distances)
     grad[mask] = -1
     return grad
     
-
+# Calculates the avergae density within the bounds
 def Av_density(num, xy_bounds):
     x_bound, y_bound = xy_bounds
     return num / (x_bound * y_bound)
 
-
+# Calculates the densities and near densities at every particle position
 def find_density(sample_point, positions, smoothing_radius, near_smoothing_radius):
     distances = np.linalg.norm(positions - sample_point, axis=1)
     density = np.sum(smoothing_function(smoothing_radius, distances))
     near_density = np.sum(near_density_smoothing(near_smoothing_radius, distances))
     return density, near_density
 
-
+# Different smoothing function for near densities
 def near_density_smoothing(smoothing_radius, dist):
     influence = (1 - (dist / smoothing_radius))**3
     influence[dist > smoothing_radius] = 0
     norm_influence = 2 * influence / (np.pi * smoothing_radius)
     return norm_influence
 
-
+# Calculates the densities and near densities at every particle position (near_pressure is purely repulsive)
 def find_pressures(densities, near_densities, Av_density, pressure_strength, near_pressure_strength):
     density_diff = densities - Av_density
     pressure = density_diff * pressure_strength
