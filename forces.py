@@ -33,8 +33,6 @@ Pressure
 """
 def apply_pressure(positions, smoothing_radius, near_smoothing_radius, xy_bounds, pressure_strength, near_pressure_strength):
     num = len(positions)
-
-    # Finds density and near denisty of every particle
     
     # Finds the average density within the bounds
     average_density = Av_density(num, xy_bounds)
@@ -46,7 +44,7 @@ def apply_pressure(positions, smoothing_radius, near_smoothing_radius, xy_bounds
     # Adds infinity to all diagonal elements (Avoid self-interaction)
     np.fill_diagonal(distances, np.inf)
     
-    # Calculate normalised direction of each element
+    # Calculate normalised direction of each particle
     directions = pos_diff / distances[..., np.newaxis]
 
     # Finds density, near denisty, pressure, near_pressure and smoothing_gradient of every particle
@@ -60,23 +58,11 @@ def apply_pressure(positions, smoothing_radius, near_smoothing_radius, xy_bounds
     return total_pressure_forces
 
 
-def calculate_dist(sample_point, particle_pos):
-    vector = np.array(sample_point) - np.array(particle_pos)
-    dist = np.linalg.norm(vector)
-    return dist
-
-# Calculate the mag
-def velocity_mag(velocities):
-    velocities = np.array(velocities)
-    magnitudes = np.linalg.norm(velocities, axis=1)
-    return magnitudes
-
-
-
 def smoothing_function(smoothing_radius, dist):
     influence = np.maximum(smoothing_radius - dist, 0)
     norm_influence = influence / ((np.pi * smoothing_radius**3) / 3)
     return norm_influence
+
 
 def smoothing_grad(smoothing_radius, distances):
     mask = (0 < distances) & (distances < smoothing_radius)
@@ -89,11 +75,13 @@ def Av_density(num, xy_bounds):
     x_bound, y_bound = xy_bounds
     return num / (x_bound * y_bound)
 
+
 def find_density(sample_point, positions, smoothing_radius, near_smoothing_radius):
     distances = np.linalg.norm(positions - sample_point, axis=1)
     density = np.sum(smoothing_function(smoothing_radius, distances))
     near_density = np.sum(near_density_smoothing(near_smoothing_radius, distances))
     return density, near_density
+
 
 def near_density_smoothing(smoothing_radius, dist):
     influence = (1 - (dist / smoothing_radius))**3

@@ -63,7 +63,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
     while True:
         # Calculate changes in velocity due to forces
         gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["Gravitational_Acceleration"])
-        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, near_smoothing_radius, boundary_conditions,
+        pressure_dv = forces.apply_pressure(position, smoothing_radius, near_smoothing_radius, boundary_conditions,
                                                        phys_constants["Pressure_Strength"], phys_constants["Near_Pressure_Strength"])     
         viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, phys_constants["Viscosity_Strength"])
 
@@ -75,7 +75,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
         position, velocity = BC.apply_BC(position, velocity, boundary_conditions)
 
         # Define colour dependent on speed
-        c = forces.velocity_mag(velocity)
+        c = np.linalg.norm(velocity, axis=1)
     
         yield np.c_[position[:,0], position[:,1], c/6] 
 
