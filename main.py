@@ -18,10 +18,10 @@ def main():
     phys_constants = {"g": 9.81}
 
     # IC & BC variables
-    num = 500
+    num = 100
     xy_boundaries = [10, 10]
     xy_max_v = [5, 5]
-    smoothing_radius = 0.5
+    smoothing_radius = 2
     viscosity_strength = 0.05
 
     # Generate Initial Conditions
@@ -55,7 +55,7 @@ def new_pos(time_steps=0, position=0, velocity=0, phys_constants=0, boundary_con
     while True:
         # Calculate changes in velocity due to forces
         gravity_dv = forces.apply_gravity(position, time_steps, phys_constants["g"])
-        pressure_dv, densities = forces.apply_pressure(position, smoothing_radius, boundary_conditions, 0.6)     
+        pressure_dv, densities = forces.apply_pressure_test(position, smoothing_radius, boundary_conditions, 0.6)     
         viscosity_dv = forces.apply_viscosity(position, velocity, smoothing_radius, viscosity_strength)
 
         # Calculate new velocity and position

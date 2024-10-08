@@ -53,6 +53,35 @@ def apply_pressure(positions, smoothing_radius, xy_bounds, pressure_strength):
 
     return total_pressure_forces, densities
 
+def apply_pressure_test(positions, smoothing_radius, xy_bounds, pressure_strength):
+    # Calculatedifferences in posistion between every particle.
+    pos_diff = positions[np.newaxis, :, :] - positions[:, np.newaxis, :]
+    distances = np.linalg.norm(pos_diff, axis=2)
+
+    # Create mask for particles which are close enough to interact.
+    mask = (distances < smoothing_radius)
+    np.fill_diagonal(mask, False)
+
+    # Calculate force magnitude and 
+    # influence = distances[mask] / ((np.pi * smoothing_radius**3) / 3)
+    pressure_influence = (2/3) * smoothing_radius**(3/2) / (1 + distances[mask])
+    magnitude = pressure_strength * pressure_influence
+    direction = -np.divide(pos_diff[mask,:], distances[mask, np.newaxis])
+    pressure_forces_masked = np.multiply(magnitude[:,np.newaxis], direction)
+
+    # Viscosity
+    #velocity_diff = -velocities[:, np.newaxis, :] + velocities[np.newaxis, :, :]
+
+    # = np.sum(velocity_diff * influences[:, :, np.newaxis], axis=1)
+    
+    #dvs = viscosity_forces * viscosity_strength
+    # Put calculated force into correct positions and sum
+    pressure_forces = np.zeros(pos_diff.shape)
+    pressure_forces[mask,:] = pressure_forces_masked
+    total_pressure_forces = np.sum(pressure_forces, axis=1) 
+
+    return total_pressure_forces, np.array([find_density(pos, positions, smoothing_radius) for pos in positions])
+
 
 def calculate_dist(sample_point, particle_pos):
     vector = np.array(sample_point) - np.array(particle_pos)
