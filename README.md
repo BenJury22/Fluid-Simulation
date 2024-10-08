@@ -1,3 +1,4 @@
-# ClimateModel
-Global Average Temperature (Time dependence):
-https://www2.oberlin.edu/math/faculty/walsh/UMAPclimate.pdf
+# Fluid Particle Simulation
+
+## Set Up Environment
+This project uses conda to manage  
